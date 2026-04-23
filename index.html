@@ -19,7 +19,6 @@
             min-height: 100vh;
             padding: 15px;
             box-sizing: border-box;
-            user-select: none; 
         }
         .quiz-card {
             max-width: 550px;
@@ -57,17 +56,13 @@
             background-color: #e0f7fa;
             border: 3px solid #00bcd4;
         }
-        .logo-placeholder {
-            border-radius: 50%;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
     <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">තොරතුරු තාක්ෂණ ප්‍රශ්නාවලිය</h1>
-    <p class="text-center text-sm text-blue-700 mb-6 font-semibold">NextGen ICT By Suraj අපි විභාග ලියන අලුත් විදිහ.</p>
+    <p class="text-center text-sm text-blue-700 mb-6 font-semibold">NextGen ICT By Suraj අපි විභාග ලියන අලුත් විදිහ. RST BY MR.PODII</p>
 
     <div id="start-screen" class="text-center p-5 bg-blue-50 rounded-lg shadow"> 
         <h2 class="text-xl font-extrabold mb-4 text-blue-800">ප්‍රශ්නාවලිය ආරම්භ කිරීමට සූදානම්ද?</h2>
@@ -81,23 +76,15 @@
             <input type="text" id="student-class" placeholder="උදා: 10 වසර" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
         </div>
         
-        <button onclick="showInstructions()" class="w-full bg-gray-200 text-gray-700 py-1 text-sm rounded-lg mb-3">උපදෙස් කියවන්න</button>
         <button onclick="validateAndStartQuiz()" class="w-full bg-blue-600 text-white py-3 text-xl rounded-lg hover:bg-blue-700 transition shadow-lg">Start Quiz</button>
         <p id="validation-message" class="text-red-600 mt-2 text-xs hidden">නම සහ පන්තිය ඇතුළත් කිරීම අනිවාර්යයි!</p>
     </div>
 
-    <div id="timer-display" class="mb-3 text-center hidden">
-        <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mb-2">
-            <div id="timer-progress" class="h-1.5 bg-red-500 transition-all duration-1000 ease-linear" style="width: 100%;"></div>
-        </div>
-        <p class="text-xs text-gray-600 font-medium"><span id="time-left">90:00</span> කාලය ඉතිරිව ඇත</p>
-    </div>
-    
     <div id="quiz-container" class="hidden"></div>
     
     <div id="results-container" class="hidden">
         <div id="result-card-to-capture" class="p-5 rounded-lg mb-4 shadow-xl"> 
-            <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Logo" class="logo-placeholder w-16 h-16 mx-auto mb-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Logo" class="w-16 h-16 mx-auto mb-3 rounded-full">
             <h2 class="text-2xl font-extrabold text-center mb-1 text-blue-900">ප්‍රතිඵලය</h2>
             <div class="mb-4 text-center">
                 <p class="text-lg font-bold text-gray-800">නම: <span id="display-student-name" class="text-blue-800">--</span></p>
@@ -112,35 +99,13 @@
     </div>
 </div>
 
-<div id="instruction-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-xl p-6 m-4 max-w-sm w-full">
-        <h3 class="text-xl font-bold text-blue-700 mb-3">ප්‍රශ්නාවලියේ උපදෙස්</h3>
-        <ul class="text-left text-gray-700 space-y-2 list-disc list-inside mb-4 text-sm">
-            <li>මුළු කාලය විනාඩි 90 කි.</li>
-            <li>Tab එක මාරු කිරීමෙන් හෝ Inspect කිරීමෙන් ප්‍රශ්නාවලිය Reset වේ.</li>
-            <li>අවසානයේ ප්‍රතිඵල ලේඛනය බාගත කළ හැකිය.</li>
-        </ul>
-        <button onclick="hideInstructions()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg">තේරුම් ගත්තා</button>
-    </div>
-</div>
-
 <script>
-    const ENABLE_TIMER = true;
-    const TOTAL_MINUTES = 90;
-    const TIME_LIMIT = TOTAL_MINUTES * 60;
-    const ENABLE_SHUFFLE = true;
-    const ENABLE_TAB_SECURITY = true;
-
     let currentQuestionIndex = 0;
     let score = 0;
     let isQuestionLocked = false;
-    let timeRemaining = TIME_LIMIT;
-    let timerInterval;
     let studentName = '';
     let studentClass = '';
-    let isQuizStarted = false;
 
-    // --- ප්‍රශ්න 80 සම්පූර්ණ ලැයිස්තුව ---
     const originalQuizData = [
         { question: "මෙහෙයුම් පද්ධතියක GUI යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "Graphical User Interface.", distractors: ["General User Interface.", "Global User Interface.", "Graphical Unit Interface.", "Group User Interface."] },
         { question: "පරිගණකයේ පියා ලෙස හඳුන්වන්නේ කාටද?", correct: "Charles Babbage.", distractors: ["Blaise Pascal.", "Howard Aiken.", "Ada Lovelace.", "John Von Neumann."] },
@@ -226,29 +191,14 @@
         { question: "PaaS යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "Platform as a Service.", distractors: ["Program as a Service.", "Process as a Service.", "Platform and Software.", "Primary as a Service."] },
         { question: "IaaS යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "Infrastructure as a Service.", distractors: ["Internet as a Service.", "Input as a Service.", "Internal as a Service.", "Integrated as a Service."] },
         { question: "Cloud Computing වාසියක් වන්නේ?", correct: "Anywhere access.", distractors: ["No internet needed.", "No updates.", "No storage.", "No login."] },
-        { question: "Cloud Computing අවාසියක් වන්නේ?", correct: "Internet connection අවශ්‍ය වීම.", distractors: ["Automatic backup.", "Easy sharing.", "Low hardware cost.", "Anywhere access."] }
+        { question: "Cloud Computing අවාසියක් වන්නේ?", correct: "Internet connection අවශ්‍ය වීම.", distractors: ["Automatic backup.", "Easy sharing.", "Low hardware cost.", "Anywhere access."] },
+        // ප්‍රශ්න 85 සම්පූර්ණ කිරීමට අමතර ප්‍රශ්න 5ක්
+        { question: "පරිගණක මතකයේ කුඩාම ඒකකය කුමක්ද?", correct: "Bit.", distractors: ["Byte.", "Kilobyte.", "Nibble."] },
+        { question: "WWW යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "World Wide Web.", distractors: ["World Wide Windows.", "Web World Wide.", "Wide World Web."] },
+        { question: "URL යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "Uniform Resource Locator.", distractors: ["Universal Resource Locator.", "Uniform Register Link.", "Universal Register Locator."] },
+        { question: "IP Address එකක 'IP' යන්නෙන් අදහස් වන්නේ?", correct: "Internet Protocol.", distractors: ["Internet Process.", "Internal Protocol.", "Internal Process."] },
+        { question: "පහත ඒවායින් වෙබ් බ්‍රවුසරයක් වන්නේ කුමක්ද?", correct: "Google Chrome.", distractors: ["MS Word.", "Google Search.", "Windows 10."] }
     ];
-
-    let quizData = [];
-
-    // Utility
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    function showInstructions() { document.getElementById('instruction-modal').classList.remove('hidden'); }
-    function hideInstructions() { document.getElementById('instruction-modal').classList.add('hidden'); }
-
-    // Security Logic
-    if (ENABLE_TAB_SECURITY) {
-        document.addEventListener("visibilitychange", () => { if (document.hidden && isQuizStarted) location.reload(); });
-        window.addEventListener("blur", () => { if (isQuizStarted) location.reload(); });
-    }
-    document.addEventListener('contextmenu', e => e.preventDefault());
 
     function validateAndStartQuiz() {
         studentName = document.getElementById('student-name').value.trim();
@@ -257,46 +207,32 @@
             document.getElementById('validation-message').classList.remove('hidden');
             return;
         }
-        startQuiz();
-    }
-
-    function startQuiz() {
-        isQuizStarted = true;
-        quizData = [...originalQuizData];
-        if (ENABLE_SHUFFLE) shuffle(quizData);
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('quiz-container').classList.remove('hidden');
-        if (ENABLE_TIMER) {
-            document.getElementById('timer-display').classList.remove('hidden');
-            startTimer();
-        }
         renderQuestion();
     }
 
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            timeRemaining--;
-            const mins = Math.floor(timeRemaining / 60);
-            const secs = timeRemaining % 60;
-            document.getElementById('time-left').textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            document.getElementById('timer-progress').style.width = `${(timeRemaining / TIME_LIMIT) * 100}%`;
-            if (timeRemaining <= 0) { clearInterval(timerInterval); showResults(); }
-        }, 1000);
-    }
-
     function renderQuestion() {
-        if (currentQuestionIndex >= quizData.length) { showResults(); return; }
+        if (currentQuestionIndex >= originalQuizData.length) {
+            showResults();
+            return;
+        }
         isQuestionLocked = false;
-        const q = quizData[currentQuestionIndex];
-        let options = shuffle([...q.distractors, q.correct]);
+        const q = originalQuizData[currentQuestionIndex];
+        // පිළිතුරු හතර පමණක් Shuffle කර පෙන්වීම
+        let options = [...q.distractors, q.correct];
+        options.sort(() => Math.random() - 0.5);
 
         document.getElementById('quiz-container').innerHTML = `
             <div class="mb-4">
-                <p class="text-sm font-bold text-blue-600">ප්‍රශ්නය ${currentQuestionIndex + 1} / ${quizData.length}</p>
+                <p class="text-sm font-bold text-blue-600">ප්‍රශ්නය ${currentQuestionIndex + 1} / ${originalQuizData.length}</p>
                 <h2 class="text-lg font-bold text-gray-800">${q.question}</h2>
             </div>
             <div class="space-y-2">
-                ${options.map(opt => `<button class="option-button w-full text-left p-3 border border-gray-300 rounded-lg bg-gray-50" onclick="checkAnswer(this, '${q.correct.replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
+                ${options.map(opt => `
+                    <button class="option-button w-full text-left p-3 border border-gray-300 rounded-lg bg-gray-50" 
+                    onclick="checkAnswer(this, '${q.correct.replace(/'/g, "\\'")}')">${opt}</button>
+                `).join('')}
             </div>
             <button id="next-button" onclick="nextQuestion()" class="mt-4 w-full bg-gray-400 text-white py-2.5 rounded-lg" disabled>ඊළඟ ප්‍රශ්නය (Next)</button>
         `;
@@ -310,7 +246,9 @@
             btn.classList.add('correct-answer');
         } else {
             btn.classList.add('incorrect-answer');
-            document.querySelectorAll('.option-button').forEach(b => { if (b.textContent.trim() === correct) b.classList.add('correct-answer'); });
+            document.querySelectorAll('.option-button').forEach(b => {
+                if (b.textContent.trim() === correct) b.classList.add('correct-answer');
+            });
         }
         document.querySelectorAll('.option-button').forEach(b => b.classList.add('disabled'));
         const nb = document.getElementById('next-button');
@@ -318,31 +256,33 @@
         nb.classList.replace('bg-gray-400', 'bg-blue-600');
     }
 
-    function nextQuestion() { currentQuestionIndex++; renderQuestion(); }
+    function nextQuestion() {
+        currentQuestionIndex++;
+        renderQuestion();
+    }
 
     function showResults() {
-        clearInterval(timerInterval);
-        isQuizStarted = false;
         document.getElementById('quiz-container').classList.add('hidden');
-        document.getElementById('timer-display').classList.add('hidden');
         document.getElementById('results-container').classList.remove('hidden');
         document.getElementById('display-student-name').textContent = studentName;
         document.getElementById('display-student-class').textContent = studentClass;
-        document.getElementById('correct-answers-count').textContent = `නිවැරදි: ${score} / ${quizData.length}`;
-        document.getElementById('final-percentage').textContent = `${Math.round((score / quizData.length) * 100)}%`;
+        document.getElementById('correct-answers-count').textContent = `නිවැරදි පිළිතුරු: ${score} / ${originalQuizData.length}`;
+        document.getElementById('final-percentage').textContent = `${Math.round((score / originalQuizData.length) * 100)}%`;
         document.getElementById('result-date').textContent = new Date().toLocaleString('si-LK');
     }
 
     function captureResultsAsImage() {
-        html2canvas(document.getElementById('result-card-to-capture')).then(canvas => {
+        html2canvas(document.getElementById('result-card-to-capture'), { scale: 2 }).then(canvas => {
             const link = document.createElement('a');
             link.download = `Result_${studentName}.jpeg`;
-            link.href = canvas.toURL('image/jpeg');
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
             link.click();
         });
     }
 
-    function resetQuizState() { location.reload(); }
+    function resetQuizState() {
+        location.reload();
+    }
 </script>
 </body>
 </html>
