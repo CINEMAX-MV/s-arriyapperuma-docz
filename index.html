@@ -62,7 +62,7 @@
 
 <div class="quiz-card">
     <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">තොරතුරු තාක්ෂණ ප්‍රශ්නාවලිය</h1>
-    <p class="text-center text-sm text-blue-700 mb-6 font-semibold">NextGen ICT By Suraj අපි විභාග ලියන අලුත් විදිහ. RST BY MR.PODII</p>
+    <p class="text-center text-sm text-blue-700 mb-6 font-semibold">NextGen ICT By Suraj අපි විභාග ලියන අලුත් විදිහ. ( RST BY Peksha )</p>
 
     <div id="start-screen" class="text-center p-5 bg-blue-50 rounded-lg shadow"> 
         <h2 class="text-xl font-extrabold mb-4 text-blue-800">ප්‍රශ්නාවලිය ආරම්භ කිරීමට සූදානම්ද?</h2>
@@ -192,7 +192,6 @@
         { question: "IaaS යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "Infrastructure as a Service.", distractors: ["Internet as a Service.", "Input as a Service.", "Internal as a Service.", "Integrated as a Service."] },
         { question: "Cloud Computing වාසියක් වන්නේ?", correct: "Anywhere access.", distractors: ["No internet needed.", "No updates.", "No storage.", "No login."] },
         { question: "Cloud Computing අවාසියක් වන්නේ?", correct: "Internet connection අවශ්‍ය වීම.", distractors: ["Automatic backup.", "Easy sharing.", "Low hardware cost.", "Anywhere access."] },
-        // ප්‍රශ්න 85 සම්පූර්ණ කිරීමට අමතර ප්‍රශ්න 5ක්
         { question: "පරිගණක මතකයේ කුඩාම ඒකකය කුමක්ද?", correct: "Bit.", distractors: ["Byte.", "Kilobyte.", "Nibble."] },
         { question: "WWW යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "World Wide Web.", distractors: ["World Wide Windows.", "Web World Wide.", "Wide World Web."] },
         { question: "URL යන්නෙහි සම්පූර්ණ නම කුමක්ද?", correct: "Uniform Resource Locator.", distractors: ["Universal Resource Locator.", "Uniform Register Link.", "Universal Register Locator."] },
@@ -200,13 +199,47 @@
         { question: "පහත ඒවායින් වෙබ් බ්‍රවුසරයක් වන්නේ කුමක්ද?", correct: "Google Chrome.", distractors: ["MS Word.", "Google Search.", "Windows 10."] }
     ];
 
+    // Page Load එකේදී කලින් තිබූ දත්ත ඇත්දැයි පරීක්ෂා කිරීම
+    window.onload = function() {
+        const savedName = localStorage.getItem('studentName');
+        const savedClass = localStorage.getItem('studentClass');
+        const savedIndex = localStorage.getItem('currentQuestionIndex');
+        const savedScore = localStorage.getItem('score');
+        const quizCompleted = localStorage.getItem('quizCompleted');
+
+        if (quizCompleted === 'true') {
+            studentName = savedName;
+            studentClass = savedClass;
+            score = parseInt(savedScore);
+            showResults();
+        } else if (savedName && savedClass) {
+            studentName = savedName;
+            studentClass = savedClass;
+            currentQuestionIndex = savedIndex ? parseInt(savedIndex) : 0;
+            score = savedScore ? parseInt(savedScore) : 0;
+            
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            renderQuestion();
+        }
+    };
+
     function validateAndStartQuiz() {
         studentName = document.getElementById('student-name').value.trim();
         studentClass = document.getElementById('student-class').value.trim();
+        
         if (!studentName || !studentClass) {
             document.getElementById('validation-message').classList.remove('hidden');
             return;
         }
+
+        // දත්ත මතකයේ තැන්පත් කිරීම
+        localStorage.setItem('studentName', studentName);
+        localStorage.setItem('studentClass', studentClass);
+        localStorage.setItem('currentQuestionIndex', 0);
+        localStorage.setItem('score', 0);
+        localStorage.setItem('quizCompleted', 'false');
+
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('quiz-container').classList.remove('hidden');
         renderQuestion();
@@ -217,9 +250,9 @@
             showResults();
             return;
         }
+        
         isQuestionLocked = false;
         const q = originalQuizData[currentQuestionIndex];
-        // පිළිතුරු හතර පමණක් Shuffle කර පෙන්වීම
         let options = [...q.distractors, q.correct];
         options.sort(() => Math.random() - 0.5);
 
@@ -241,8 +274,10 @@
     function checkAnswer(btn, correct) {
         if (isQuestionLocked) return;
         isQuestionLocked = true;
+        
         if (btn.textContent.trim() === correct) {
             score++;
+            localStorage.setItem('score', score);
             btn.classList.add('correct-answer');
         } else {
             btn.classList.add('incorrect-answer');
@@ -250,6 +285,7 @@
                 if (b.textContent.trim() === correct) b.classList.add('correct-answer');
             });
         }
+        
         document.querySelectorAll('.option-button').forEach(b => b.classList.add('disabled'));
         const nb = document.getElementById('next-button');
         nb.disabled = false;
@@ -258,11 +294,14 @@
 
     function nextQuestion() {
         currentQuestionIndex++;
+        localStorage.setItem('currentQuestionIndex', currentQuestionIndex);
         renderQuestion();
     }
 
     function showResults() {
+        localStorage.setItem('quizCompleted', 'true');
         document.getElementById('quiz-container').classList.add('hidden');
+        document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('results-container').classList.remove('hidden');
         document.getElementById('display-student-name').textContent = studentName;
         document.getElementById('display-student-class').textContent = studentClass;
@@ -281,6 +320,8 @@
     }
 
     function resetQuizState() {
+        // මතකය මකා දැමීම
+        localStorage.clear();
         location.reload();
     }
 </script>
